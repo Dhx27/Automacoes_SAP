@@ -1,58 +1,11 @@
-import sys
 import tkinter as tk
 from tkinter import ttk
-import win32com.client
 import time
 from tkinter import ttk, messagebox
+from utils.sap_connection import sap_logon, fechar_sistema_sap
+from utils.wait_element import aguardar_elemento
 
 session = None
-
-def fechar_sistema(session=None):
-    try:
-        if session:  
-            session.findById("wnd[0]").close()
-    except:
-        pass
-
-    root.destroy()
-    sys.exit()
-    
-    
-#Função definida para obter a janela logada, iniciar uma nova e dar a trativa prevista nela
-def sap_logon():
-    
-    # Conectar ao SAP GUI via COM
-    sap_gui = win32com.client.GetObject("SAPGUI")
-    app = sap_gui.GetScriptingEngine
-    connection = app.Children(0)
-    session = connection.Children(0)
-
-    session.createSession()
-    
-    time.sleep(10)
-
-    # pegar a última sessão (a nova aba criada)
-    new_session = connection.Children(connection.Children.Count - 1)
-
-    return new_session
-
-
-#Função definida para aguardar elementos 
-def aguardar_elemento(session, element_id, timeout=10, poll=0.2):
-    
-    t0 = time.time()
-    
-    while time.time() - t0 < timeout:
-        try:
-            
-            obj = session.findById(element_id)
-            return obj
-        except:
-            
-            time.sleep(poll)
-    
-    raise TimeoutError(f"Fornecimento  não encontrado (ou já excluído")
-
 
 
 def cancelar_fornecimentos():
@@ -108,7 +61,7 @@ def cancelar_fornecimentos():
     if resposta:
         texto.delete("1.0", tk.END)  # limpa textbox
     else: 
-        fechar_sistema(session)
+        fechar_sistema_sap(session)
              
 
     
@@ -191,10 +144,10 @@ rodape = tk.Label(
 rodape.pack(side="bottom", pady=5)
 
 try:
-    root.protocol("WM_DELETE_WINDOW", lambda: fechar_sistema(session))
+    root.protocol("WM_DELETE_WINDOW", lambda: fechar_sistema_sap(session))
 except NameError:
     
-    root.protocol("WM_DELETE_WINDOW", fechar_sistema)
+    root.protocol("WM_DELETE_WINDOW", fechar_sistema_sap)
     
     
 root.mainloop()
