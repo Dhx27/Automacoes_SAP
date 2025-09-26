@@ -1,4 +1,4 @@
-# remove_password_gui.py
+#Salvar pdf sem senha
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import pikepdf

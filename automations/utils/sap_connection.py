@@ -1,4 +1,3 @@
-from logging import root
 import win32com.client
 import time
 import sys
@@ -22,13 +21,14 @@ def sap_logon():
     return new_session
 
 
-def fechar_sistema_sap(session=None):
+def fechar_sistema_sap(session=None, root=None):
     try:
         if session:  
             session.findById("wnd[0]").close()
     except:
         pass
 
-    root.destroy()
+    if not root:
+        root.destroy()
     sys.exit()
     

@@ -1,3 +1,4 @@
+#Cancelador de saldos via transação SAP
 import tkinter as tk
 from tkinter import ttk
 import time
@@ -61,7 +62,7 @@ def cancelar_fornecimentos():
     if resposta:
         texto.delete("1.0", tk.END)  # limpa textbox
     else: 
-        fechar_sistema_sap(session)
+        fechar_sistema_sap(session, root)
              
 
     
@@ -144,7 +145,7 @@ rodape = tk.Label(
 rodape.pack(side="bottom", pady=5)
 
 try:
-    root.protocol("WM_DELETE_WINDOW", lambda: fechar_sistema_sap(session))
+    root.protocol("WM_DELETE_WINDOW", lambda: fechar_sistema_sap(session, root))
 except NameError:
     
     root.protocol("WM_DELETE_WINDOW", fechar_sistema_sap)
